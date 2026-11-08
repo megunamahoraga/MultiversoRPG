@@ -1,36 +1,59 @@
-# Multiverso RPG | Edição Eclipse 3.0
+# Multiverso RPG · Edição Quatro Histórias
 
-Atualização visual feita sobre a versão anterior do jogo (com 10 avatares, seleção com confirmação, classes existentes e salas configuráveis).
+Esta versão separa o RPG em **4 campanhas independentes**. O anfitrião **escolhe primeiro a história** e **depois escolhe a quantidade de vagas**. Os convidados recebem automaticamente o universo definido para a sala.
 
-## O que mudou
+## Campanhas disponíveis
 
-- Nova identidade visual "Crônicas do Véu" e tela inicial cinematográfica.
-- Cores, tipografia, fundo, cartões, botões, inputs e contraste reorganizados.
-- Cards de participantes com retrato, classe e atributos mais legíveis.
-- Barras de vida e exibição das batalhas mais consistentes.
-- Seleção de 10 avatares em grade adaptada a desktop e mobile, com visualização de corpo inteiro, destaque e confirmação.
-- Mantido o sistema original de classes, profissões, itens, progressão e multiplayer.
+- **Jujutsu Kaisen | A maldição de Tóquio:** Escola sob o Véu, Estação de Shibuya e O Ritual do Selo. Feiticeiros, maldições, talismãs e barreiras.
+- **Tokyo Ghoul | Sombras do Distrito 20:** Café Anteiku, Operação no Distrito e A Noite das Máscaras. Ghouls, CCG, kagune, máscaras e escolhas morais.
+- **Dragon Ball | A jornada das sete esferas:** O Radar das Esferas, Treino na Torre e A Última Esfera. Ki, torneios, treinamento e Esferas do Dragão.
+- **Demon Slayer | O juramento da Nichirin:** Seleção Final, O Trem da Madrugada e A Fortaleza ao Anoitecer. Oni, Respirações, glicínias e espadas Nichirin.
 
-## Arquivos
+Cada campanha tem **3 capítulos, 9 cenas narrativas com duas escolhas, inimigos comuns, combates, itens e três chefes**. Os personagens possuem classes disponíveis de acordo com o universo escolhido. São aventuras **originais inspiradas nos conceitos dos universos**, não reproduções de episódios completos.
 
-- `public/index.html`: interface e regras do jogo
-- `public/avatars/`: retratos dos 10 personagens
-- `worker.js`: servidor das salas online
-- `wrangler.jsonc`: configuração de implantação
+## Estrutura do pacote
 
-## Publicação no GitHub + Cloudflare
+```text
+worker.js
+wrangler.jsonc
+public/
+  index.html
+  avatars/
+    01.png ... 10.png
+LEIA-ME.md
+```
 
-1. Extraia o ZIP. Abra a pasta `multiverso-rpg-atualizado`.
-2. Substitua os arquivos correspondentes no **mesmo local** do repositório GitHub conectado ao Cloudflare Workers.
-3. Preserve a estrutura `public/avatars/` e não mova `public/index.html` para a raiz.
-4. Aguarde o deploy automático ou use o processo de implantação que você já utiliza.
-5. Faça um teste de uma sala com pelo menos dois dispositivos.
+## Publicar no GitHub / Cloudflare Workers & Pages
 
-## Validação realizada
+1. Faça backup dos arquivos que já estão publicados.
+2. Extraia o ZIP e copie os arquivos da pasta principal diretamente para a **raiz do repositório** conectado à Cloudflare, substituindo os anteriores.
+3. Preserve a pasta `public/avatars` com as 10 imagens.
+4. Use o deploy automático do GitHub ou `npx wrangler deploy` no diretório do projeto.
+5. Teste duas sessões em navegadores ou celulares diferentes: crie uma sala, escolha **Dragon Ball**, defina vagas e entre com outro aparelho; confirme se os dois veem Dragon Ball.
+6. Abra outra sala com outro universo para conferir que as campanhas não se misturam.
 
-- Sintaxe do JavaScript verificada.
-- Fluxo local verificado em navegador simulado para desktop (1280px) e celular (390px): menu, dificuldade, classe, profissão, 10 avatares, confirmação e início da aventura.
-- Sem erros JavaScript ou rolagem horizontal nos dois tamanhos testados.
-- Não foi feito teste multiplayer real com Cloudflare em produção.
+## Observações técnicas
 
-**Observação:** Imagens de personagens inspiradas em obras conhecidas foram fornecidas pelo usuário. Para uso comercial/público, verifique os direitos de uso dessas imagens.
+- O anfitrião conduz a simulação. Os convidados enviam comandos ao servidor por meio de uma sala Cloudflare Durable Object.
+- Ao criar uma sala, o servidor grava também o identificador da campanha. A resposta de entrada retorna esse identificador aos convidados.
+- O anfitrião pode escolher quantos jogadores entram, sem limite fixo de 4. O desempenho real depende dos aparelhos, da conexão e da Cloudflare.
+- Se começar a partida com vagas vazias, a criação de personagens considerará **os participantes conectados no momento do início**. Evite entradas tardias após o começo.
+- O progresso local grava qual campanha estava sendo jogada; partidas antigas sem identificação de campanha podem iniciar como Jujutsu Kaisen ao continuar.
+- Use os universos, personagens e imagens apenas conforme os direitos/licenças aplicáveis. Este é um projeto de fã não oficial.
+
+## Referências de pesquisa
+
+- Jujutsu Kaisen (site oficial): https://jujutsukaisen.jp/story/
+- Tokyo Ghoul (VIZ): https://www.viz.com/tokyo-ghoul
+- Tokyo Ghoul (glossário oficial): https://www.marv.jp/special/tokyoghoul/first/glossary.html
+- Dragon Ball (site oficial): https://en.dragon-ball-official.com/news/01_3850.html
+- Demon Slayer (Aniplex): https://www.aniplex.co.jp/lineup/kimetsu_anime/story/
+
+## Testes realizados
+
+- Verificação de sintaxe de `worker.js` e do script JavaScript de `index.html`.
+- Verificação por execução em ambiente JavaScript das quatro configurações de campanha e seus 3 capítulos.
+- Simulação lógica da progressão até o encerramento da terceira missão de cada campanha.
+- Simulação da criação de uma sala e da entrada de um convidado, validando o retorno da campanha gravada no servidor.
+
+**Ainda não foi possível validar visualmente em um navegador real nem concluir um teste multiplayer completo com dois dispositivos. Faça esses testes antes de publicar para todos.**

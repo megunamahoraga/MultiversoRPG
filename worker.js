@@ -2,7 +2,7 @@
 export class Room {
   constructor(state) { this.s = state; this.d = null; }
   async load() {
-    if (!this.d) this.d = (await this.s.storage.get("d")) || { v: 0, snap: null, acts: [], n: 0, q: 0, tok: null, capacity: 4 };
+    if (!this.d) this.d = (await this.s.storage.get("d")) || { v: 0, snap: null, acts: [], n: 0, q: 0, tok: null, capacity: 4, game: "jjk" };
     return this.d;
   }
   async fetch(req) {
@@ -14,8 +14,9 @@ export class Room {
       if (d.tok) return out({ err: "exists" }, 409);
       const capacity = Number(j.capacity);
       if (!Number.isSafeInteger(capacity) || capacity < 1) return out({ err: "Quantidade de jogadores inválida" }, 400);
-      d.capacity = capacity; d.tok = crypto.randomUUID(); d.n = 1; await save();
-      return out({ tok: d.tok });
+      if (!["jjk", "ghoul", "db", "ds"].includes(j.game)) return out({err:"Campanha inválida"},400);
+      d.game = j.game; d.capacity = capacity; d.tok = crypto.randomUUID(); d.n = 1; await save();
+      return out({ tok: d.tok, game: d.game });
     }
     if (!d.tok) return out({ err: "Sala não encontrada. Confira o código." }, 404);
     if (op === "join") {
@@ -24,7 +25,7 @@ export class Room {
         if (d.n >= d.capacity) return out({ err: "Sala lotada. Peça ao anfitrião para criar outra sala." }, 409);
         s = ++d.n; await save();
       }
-      return out({ slot: s, capacity: d.capacity });
+      return out({ slot: s, capacity: d.capacity, game: d.game });
     }
     if (op === "state" && req.method === "POST") {
       if (j.tok !== d.tok) return out({ err: "no" }, 403);
