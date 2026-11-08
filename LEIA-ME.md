@@ -1,21 +1,37 @@
-# Multiverso RPG Online · Edição Expedições
+# Multiverso RPG Online · Edição Personagens & Interface
 
 ## Arquivos
 - `worker.js`
 - `wrangler.jsonc`
 - `public/index.html`
+- `public/avatars/` (10 retratos usados na seleção de personagens)
 
-## Publicação na Cloudflare Workers
-1. Atualize esses arquivos no repositório GitHub conectado à Cloudflare, preservando a pasta `public`.
-2. No painel Cloudflare, confira o projeto Workers & Pages vinculado ao repositório.
-3. Faça o deploy com `npx wrangler deploy` (ou deixe a integração Git realizar o deploy automático).
-4. Abra a URL do Worker e escolha **Criar sala online**.
+## O que foi atualizado
+- **Salas com capacidade personalizada**: o anfitrião escolhe quantos participantes entram.
+- **Interface refeita**: visual mais bonito, com HUD em cards, retratos e destaque para o jogador da vez.
+- **10 personagens para escolher no início**: cada jogador escolhe seu retrato antes da aventura começar.
+- **Retratos no lugar de J1 / J2 / J3...**: durante a partida, os jogadores aparecem com suas imagens na interface.
+- **Multiplayer preservado**: funciona tanto no modo local quanto na sala online.
+- **Novas classes mantidas**: Majin Saiyajin, Meio-Humano, Humano e Meio-Ghoul continuam disponíveis.
+
+## Como publicar na Cloudflare Workers & Pages
+1. Extraia o ZIP.
+2. Substitua os arquivos do seu repositório GitHub conectado à Cloudflare.
+3. Preserve a estrutura da pasta `public`, incluindo a pasta `public/avatars`.
+4. Faça o deploy automático pelo GitHub ou rode `npx wrangler deploy`.
+5. Abra o jogo e teste uma sala online antes de liberar para todo mundo.
 
 ## Como jogar
-O anfitrião escolhe o número de vagas, cria a sala e compartilha o código ou link. Cada participante entra em seu próprio dispositivo. O anfitrião mantém sua aba aberta para conduzir a partida. O modo no mesmo aparelho também aceita quantidade personalizada.
+1. O anfitrião cria a sala e define quantas vagas estarão disponíveis.
+2. Os convidados entram pelo código ou link da sala.
+3. Cada jogador escolhe:
+   - classe;
+   - profissão;
+   - um dos 10 personagens.
+4. Depois disso, a aventura começa normalmente.
 
 ## Observações
-- Não existe mais um limite fixo de quatro participantes. Na prática, capacidade e desempenho dependem dos recursos da plataforma e dos aparelhos.
-- O anfitrião controla a simulação; os convidados enviam suas escolhas ao servidor.
-- Para salas novas, o limite escolhido é aplicado pelo servidor. Uma sala já criada não tem seu limite alterado.
-- Faça backup do projeto atual antes de publicar esta versão.
+- Não existe mais limite fixo de 4 jogadores no código.
+- Na prática, salas muito grandes podem depender do desempenho do navegador e da conexão.
+- O anfitrião continua sendo quem mantém a sessão ativa no modo online.
+- Se quiser alterar novamente retratos, textos ou balanceamento, você pode editar só o `public/index.html` e a pasta `public/avatars`.
