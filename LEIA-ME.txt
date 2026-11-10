@@ -1,0 +1,12 @@
+MULTIVERSO RPG - RETRATOS REMASTERIZADOS (2D CINEMATOGRAFICO)
+
+10 retratos existentes preservados nos nomes 01.png a 10.png.
+Imagens novas: 1080x1620, fundo escuro, brilho, moldura e enquadramento.
+IMPORTANTE: nao sao modelos 3D gerados; sao reformulacoes 2D das imagens originais.
+
+O GitHub tem tambem 11.png, que nao estava disponivel no arquivo local
+e nao foi possivel obter como imagem binaria nesta sessao.
+Nao sobrescreva 11.png ao subir este pacote.
+
+Para publicar: substitua somente 01.png a 10.png na pasta public/avatars.
+
