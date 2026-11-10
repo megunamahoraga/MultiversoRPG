@@ -20,7 +20,7 @@ public/
   index.html
   avatars/
     01.png ... 10.png
-  art/
+  arts/
     home-splash.png
     home-portal.png
     event-chest.png
@@ -42,13 +42,13 @@ LEIA-ME.md
 - **Eventos com imagens próprias** para portal, baú, mercador e acampamento.
 - **Combates com artes novas** para inimigos comuns, elites e chefes.
 - **Tela final melhorada** com imagem de coroa mágica.
-- **Nova pasta `public/art`** adicionada ao projeto para armazenar os assets da interface.
+- **Nova pasta `public/arts`** adicionada ao projeto para armazenar os assets da interface.
 
 ## Publicar no GitHub / Cloudflare Workers & Pages
 
 1. Faça backup dos arquivos que já estão publicados.
 2. Extraia o ZIP e copie os arquivos da pasta principal diretamente para a **raiz do repositório** conectado à Cloudflare, substituindo os anteriores.
-3. Preserve as pastas `public/avatars` e `public/art`, porque elas contêm os retratos e as novas artes do jogo.
+3. Preserve as pastas `public/avatars` e `public/arts`, porque elas contêm os retratos e as novas artes do jogo.
 4. Use o deploy automático do GitHub ou `npx wrangler deploy` no diretório do projeto.
 5. Teste duas sessões em navegadores ou celulares diferentes: crie uma sala, escolha **Dragon Ball**, defina vagas e entre com outro aparelho; confirme se os dois veem Dragon Ball.
 6. Abra outra sala com outro universo para conferir que as campanhas não se misturam.
@@ -90,7 +90,17 @@ LEIA-ME.md
 - Os retratos de inimigos aparecem durante **todos os turnos do combate**, não apenas na abertura.
 - Entradas de capítulos agora mostram o portal ilustrado.
 - As artes 3D de eventos, itens, acampamento, chefes e final estão integradas às telas do jogo.
-- Cada arte tem versão WebP otimizada para navegadores e PNG original na pasta `public/art`.
+- Cada arte tem versão WebP otimizada para navegadores e PNG original na pasta `public/arts`.
 - Imagens usam `object-fit: contain` e dimensões adaptáveis para evitar cortes no celular.
 
 Depois do deploy, atualize a página com Ctrl+F5. A sintaxe JavaScript foi verificada, mas uma partida online real ainda deve ser testada antes de divulgar a atualização.
+
+
+## Correção de avatares WebP (novembro de 2026)
+
+- Os 10 avatares da seleção agora são carregados por `avatars/01.webp` a `avatars/10.webp`.
+- A pasta de cenários e eventos continua sendo `public/arts`.
+- A pasta `public/avatars` inclui os arquivos WebP e não utiliza mais os PNG antigos.
+- `11.webp`, caso exista no seu GitHub, não é alterado e não está registrado na seleção atual de 10 personagens.
+- Para publicar, envie também a pasta `public/avatars` completa e substitua o `public/index.html`.
+- Se as imagens antigas persistirem, atualize a página com Ctrl+F5 e confira o deploy da Cloudflare.
