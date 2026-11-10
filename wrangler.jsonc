@@ -5,10 +5,14 @@
   "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": ["/api/*"] },
   "durable_objects": { "bindings": [{ "name": "ROOM", "class_name": "Room" }] },
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Room"] }],
-  "d1_databases": [{
+  "d1_databases": [
+  {
     "binding": "DB",
     "database_name": "multiverso-rpg-users",
     "database_id": "d4d9bb1b-970a-4d4e-bf9e-6e4241244c12",
     "migrations_dir": "migrations"
-  }]
+  }
+]
 }
+
+
