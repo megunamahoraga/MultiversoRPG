@@ -1,4 +1,6 @@
-# Multiverso RPG · Edição Portal Seguro 5.0
+# Multiverso RPG · Edição Portal Seguro 5.1 (revisada)
+
+Esta versão corrige problemas da edição 5.0. Consulte `ATUALIZACOES-v5.1.md` para os detalhes.
 
 Esta versão tem **cadastro real de jogadores, login, aprovação manual pelo administrador, bloqueio de contas e painel administrativo protegido por senha**. As quatro campanhas, os avatares WebP, a pasta `public/arts` e as salas multiplayer foram preservadas.
 
@@ -76,3 +78,6 @@ Acesse o domínio do seu jogo e clique em **Cadastrar** para criar uma conta de 
 - `public/index.html` — tela de login/cadastro, painel administrativo e jogo
 - `public/avatars` — retratos em WebP
 - `public/arts` — imagens 3D das cenas e batalhas
+
+
+**Nota de segurança:** a sessão de administrador expira em 8 horas. Se você mudar o segredo `ADMIN_PASSWORD`, as sessões administrativas anteriores perdem o acesso.

@@ -1,0 +1,6 @@
+{
+  "name": "multiverso-rpg-portal-seguro",
+  "private": true,
+  "type": "module",
+  "scripts": {"test": "node tests/smoke.mjs"}
+}
