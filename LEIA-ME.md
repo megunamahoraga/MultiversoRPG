@@ -78,3 +78,19 @@ LEIA-ME.md
 - Simulação da criação de uma sala e da entrada de um convidado, validando o retorno da campanha gravada no servidor.
 
 **Ainda não foi possível validar visualmente em um navegador real nem concluir um teste multiplayer completo com dois dispositivos. Faça esses testes antes de publicar para todos.**
+
+## Upgrade visual adicional
+
+- Assets internos atualizados de **8-bit/pixel art para 3D Full HD**.
+- Portal, baú, mercador, acampamento, espírito, inimigos, chefes e coroa final agora usam artes 3D mais bonitas e profissionais.
+
+## Edição 3D Remasterizada (nova versão)
+
+- A home carrega a nova arte da coleção 3D.
+- Os retratos de inimigos aparecem durante **todos os turnos do combate**, não apenas na abertura.
+- Entradas de capítulos agora mostram o portal ilustrado.
+- As artes 3D de eventos, itens, acampamento, chefes e final estão integradas às telas do jogo.
+- Cada arte tem versão WebP otimizada para navegadores e PNG original na pasta `public/art`.
+- Imagens usam `object-fit: contain` e dimensões adaptáveis para evitar cortes no celular.
+
+Depois do deploy, atualize a página com Ctrl+F5. A sintaxe JavaScript foi verificada, mas uma partida online real ainda deve ser testada antes de divulgar a atualização.
