@@ -8,7 +8,7 @@
   "d1_databases": [{
     "binding": "DB",
     "database_name": "multiverso-rpg-users",
-    "database_id": "COLE_AQUI_O_ID_DO_SEU_D1",
+    "database_id": "d4d9bb1b-970a-4d4e-bf9e-6e4241244c12",
     "migrations_dir": "migrations"
   }]
 }
