@@ -20,14 +20,35 @@ public/
   index.html
   avatars/
     01.png ... 10.png
+  art/
+    home-splash.png
+    home-portal.png
+    event-chest.png
+    event-merchant.png
+    event-camp.png
+    enemy-spirit.png
+    enemy-demon-purple.png
+    enemy-demon-violet.png
+    enemy-elite.png
+    enemy-boss.png
+    ending-crown.png
 LEIA-ME.md
 ```
+
+
+## Atualização visual desta versão
+
+- **Nova home ilustrada** com arte principal do Multiverso RPG.
+- **Eventos com imagens próprias** para portal, baú, mercador e acampamento.
+- **Combates com artes novas** para inimigos comuns, elites e chefes.
+- **Tela final melhorada** com imagem de coroa mágica.
+- **Nova pasta `public/art`** adicionada ao projeto para armazenar os assets da interface.
 
 ## Publicar no GitHub / Cloudflare Workers & Pages
 
 1. Faça backup dos arquivos que já estão publicados.
 2. Extraia o ZIP e copie os arquivos da pasta principal diretamente para a **raiz do repositório** conectado à Cloudflare, substituindo os anteriores.
-3. Preserve a pasta `public/avatars` com as 10 imagens.
+3. Preserve as pastas `public/avatars` e `public/art`, porque elas contêm os retratos e as novas artes do jogo.
 4. Use o deploy automático do GitHub ou `npx wrangler deploy` no diretório do projeto.
 5. Teste duas sessões em navegadores ou celulares diferentes: crie uma sala, escolha **Dragon Ball**, defina vagas e entre com outro aparelho; confirme se os dois veem Dragon Ball.
 6. Abra outra sala com outro universo para conferir que as campanhas não se misturam.
