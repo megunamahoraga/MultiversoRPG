@@ -1,106 +1,78 @@
-# Multiverso RPG · Edição Quatro Histórias
+# Multiverso RPG · Edição Portal Seguro 5.0
 
-Esta versão separa o RPG em **4 campanhas independentes**. O anfitrião **escolhe primeiro a história** e **depois escolhe a quantidade de vagas**. Os convidados recebem automaticamente o universo definido para a sala.
+Esta versão tem **cadastro real de jogadores, login, aprovação manual pelo administrador, bloqueio de contas e painel administrativo protegido por senha**. As quatro campanhas, os avatares WebP, a pasta `public/arts` e as salas multiplayer foram preservadas.
 
-## Campanhas disponíveis
+> **ATENÇÃO: configuração obrigatória antes de publicar.** O jogo não funcionará corretamente até você criar o banco D1 e definir sua senha administrativa na Cloudflare. Não existe senha padrão no código. Não coloque sua senha em `index.html`, `worker.js` ou no GitHub.
 
-- **Jujutsu Kaisen | A maldição de Tóquio:** Escola sob o Véu, Estação de Shibuya e O Ritual do Selo. Feiticeiros, maldições, talismãs e barreiras.
-- **Tokyo Ghoul | Sombras do Distrito 20:** Café Anteiku, Operação no Distrito e A Noite das Máscaras. Ghouls, CCG, kagune, máscaras e escolhas morais.
-- **Dragon Ball | A jornada das sete esferas:** O Radar das Esferas, Treino na Torre e A Última Esfera. Ki, torneios, treinamento e Esferas do Dragão.
-- **Demon Slayer | O juramento da Nichirin:** Seleção Final, O Trem da Madrugada e A Fortaleza ao Anoitecer. Oni, Respirações, glicínias e espadas Nichirin.
+## Instalação (Cloudflare Workers + GitHub)
 
-Cada campanha tem **3 capítulos, 9 cenas narrativas com duas escolhas, inimigos comuns, combates, itens e três chefes**. Os personagens possuem classes disponíveis de acordo com o universo escolhido. São aventuras **originais inspiradas nos conceitos dos universos**, não reproduções de episódios completos.
+O projeto já tem `worker.js`, `public/index.html`, `wrangler.jsonc` e `migrations/0001_auth.sql`.
 
-## Estrutura do pacote
+### 1. Criar banco D1
 
-```text
-worker.js
-wrangler.jsonc
-public/
-  index.html
-  avatars/
-    01.png ... 10.png
-  arts/
-    home-splash.png
-    home-portal.png
-    event-chest.png
-    event-merchant.png
-    event-camp.png
-    enemy-spirit.png
-    enemy-demon-purple.png
-    enemy-demon-violet.png
-    enemy-elite.png
-    enemy-boss.png
-    ending-crown.png
-LEIA-ME.md
+Abra o terminal na raiz do projeto, com Node.js instalado e sua conta Cloudflare conectada:
+
+```bash
+npx wrangler login
+npx wrangler d1 create multiverso-rpg-users
 ```
 
+O comando devolve um `database_id`. Abra `wrangler.jsonc` e substitua **`COLE_AQUI_O_ID_DO_SEU_D1`** pelo ID retornado. **Deixe o binding exatamente como `DB`.**
 
-## Atualização visual desta versão
+### 2. Criar as tabelas
 
-- **Nova home ilustrada** com arte principal do Multiverso RPG.
-- **Eventos com imagens próprias** para portal, baú, mercador e acampamento.
-- **Combates com artes novas** para inimigos comuns, elites e chefes.
-- **Tela final melhorada** com imagem de coroa mágica.
-- **Nova pasta `public/arts`** adicionada ao projeto para armazenar os assets da interface.
+```bash
+npx wrangler d1 migrations apply multiverso-rpg-users --remote
+```
 
-## Publicar no GitHub / Cloudflare Workers & Pages
+Isso cria tabelas `users`, `sessions`, `auth_limits` e `settings`. Sem este passo, o login não funcionará.
 
-1. Faça backup dos arquivos que já estão publicados.
-2. Extraia o ZIP e copie os arquivos da pasta principal diretamente para a **raiz do repositório** conectado à Cloudflare, substituindo os anteriores.
-3. Preserve as pastas `public/avatars` e `public/arts`, porque elas contêm os retratos e as novas artes do jogo.
-4. Use o deploy automático do GitHub ou `npx wrangler deploy` no diretório do projeto.
-5. Teste duas sessões em navegadores ou celulares diferentes: crie uma sala, escolha **Dragon Ball**, defina vagas e entre com outro aparelho; confirme se os dois veem Dragon Ball.
-6. Abra outra sala com outro universo para conferir que as campanhas não se misturam.
+### 3. Configurar a senha de administrador
 
-## Observações técnicas
+Crie uma senha forte, exclusiva, com ao menos 12 caracteres. Defina-a como **segredo privado** do Worker, nunca como variável pública ou arquivo do GitHub:
 
-- O anfitrião conduz a simulação. Os convidados enviam comandos ao servidor por meio de uma sala Cloudflare Durable Object.
-- Ao criar uma sala, o servidor grava também o identificador da campanha. A resposta de entrada retorna esse identificador aos convidados.
-- O anfitrião pode escolher quantos jogadores entram, sem limite fixo de 4. O desempenho real depende dos aparelhos, da conexão e da Cloudflare.
-- Se começar a partida com vagas vazias, a criação de personagens considerará **os participantes conectados no momento do início**. Evite entradas tardias após o começo.
-- O progresso local grava qual campanha estava sendo jogada; partidas antigas sem identificação de campanha podem iniciar como Jujutsu Kaisen ao continuar.
-- Use os universos, personagens e imagens apenas conforme os direitos/licenças aplicáveis. Este é um projeto de fã não oficial.
+```bash
+npx wrangler secret put ADMIN_PASSWORD
+```
 
-## Referências de pesquisa
+O terminal solicitará a senha sem exibi-la. Se você publica diretamente pela interface Cloudflare, configure o segredo `ADMIN_PASSWORD` em **Workers & Pages → seu Worker → Settings → Variables and Secrets** (tipo **Secret**, não texto público). Certifique-se de que o banco D1 `DB` está vinculado ao **mesmo Worker publicado**.
 
-- Jujutsu Kaisen (site oficial): https://jujutsukaisen.jp/story/
-- Tokyo Ghoul (VIZ): https://www.viz.com/tokyo-ghoul
-- Tokyo Ghoul (glossário oficial): https://www.marv.jp/special/tokyoghoul/first/glossary.html
-- Dragon Ball (site oficial): https://en.dragon-ball-official.com/news/01_3850.html
-- Demon Slayer (Aniplex): https://www.aniplex.co.jp/lineup/kimetsu_anime/story/
+### 4. Publicar
 
-## Testes realizados
+Envie os arquivos para o GitHub conectado ao Cloudflare e confira se `wrangler.jsonc` tem o ID correto e se o deploy mantém os bindings `DB` e `ROOM`. Se usar o terminal:
 
-- Verificação de sintaxe de `worker.js` e do script JavaScript de `index.html`.
-- Verificação por execução em ambiente JavaScript das quatro configurações de campanha e seus 3 capítulos.
-- Simulação lógica da progressão até o encerramento da terceira missão de cada campanha.
-- Simulação da criação de uma sala e da entrada de um convidado, validando o retorno da campanha gravada no servidor.
+```bash
+npx wrangler deploy
+```
 
-**Ainda não foi possível validar visualmente em um navegador real nem concluir um teste multiplayer completo com dois dispositivos. Faça esses testes antes de publicar para todos.**
+Acesse o domínio do seu jogo e clique em **Cadastrar** para criar uma conta de jogador. O cadastro ficará `Pendente`. Clique em **Área administrativa**, digite sua senha e **Aprovar** para liberar o jogador. Somente depois de aprovado o usuário poderá fazer login e jogar.
 
-## Upgrade visual adicional
+## Recursos incluídos
 
-- Assets internos atualizados de **8-bit/pixel art para 3D Full HD**.
-- Portal, baú, mercador, acampamento, espírito, inimigos, chefes e coroa final agora usam artes 3D mais bonitas e profissionais.
+- **Cadastro**: usuário, e-mail e senha. Novas contas começam sempre como `Pendente`.
+- **Login**: usuário/e-mail e senha. Apenas contas aprovadas podem entrar.
+- **Admin**: acesso por senha secreta, lista de usuários, busca, aprovar, recusar, bloquear e liberar.
+- **Segurança**: PBKDF2-SHA256 com salt aleatório, sessão aleatória em cookie `HttpOnly; SameSite=Strict; Secure` no HTTPS, credenciais checadas no Worker, bloqueio imediato de sessões ao recusar/bloquear, limitação básica de tentativas, proteção de origem em POST.
+- **Salas online**: somente usuários aprovados podem criar/entrar/interagir. Cada sala vincula a posição ao usuário autenticado. A pessoa que criou a sala continua sendo o anfitrião.
+- **Privacidade local**: progresso do jogo é separado por nome de conta no armazenamento do navegador.
+- **Inscrições**: o administrador pode suspender novos cadastros.
 
-## Edição 3D Remasterizada (nova versão)
+## Observações e limites
 
-- A home carrega a nova arte da coleção 3D.
-- Os retratos de inimigos aparecem durante **todos os turnos do combate**, não apenas na abertura.
-- Entradas de capítulos agora mostram o portal ilustrado.
-- As artes 3D de eventos, itens, acampamento, chefes e final estão integradas às telas do jogo.
-- Cada arte tem versão WebP otimizada para navegadores e PNG original na pasta `public/arts`.
-- Imagens usam `object-fit: contain` e dimensões adaptáveis para evitar cortes no celular.
+- **Não há envio de e-mails**, validação de e-mail nem recuperação automática de senhas nesta versão. O formulário é um pedido de acesso, não prova que o usuário é dono do e-mail informado.
+- O administrador usa a senha configurada no segredo `ADMIN_PASSWORD` na Cloudflare. Para trocá-la, atualize o segredo no painel Cloudflare. Não há mudança de senha do admin na interface.
+- Não há senha inicial nem conta admin padrão: isso evita que alguém descubra uma credencial embutida no site.
+- A administração **não é uma proteção baseada só em JavaScript**: todas as ações e permissões importantes são verificadas no servidor e no banco D1.
+- Salas antigas abertas antes desta atualização não possuem os vínculos de contas e **devem ser recriadas** após a publicação.
+- Configure o binding D1 e migração antes da primeira implantação. É recomendável testar duas contas e dois celulares antes de anunciar a nova versão.
+- Para continuar usando sua estrutura atual, mantenha `public/avatars/*.webp` e `public/arts/*` com esses nomes.
+- O limite de sala do servidor é **100 vagas** para evitar cargas extremas; ainda assim, salas grandes precisam de testes de desempenho.
 
-Depois do deploy, atualize a página com Ctrl+F5. A sintaxe JavaScript foi verificada, mas uma partida online real ainda deve ser testada antes de divulgar a atualização.
+## Arquivos principais
 
-
-## Correção de avatares WebP (novembro de 2026)
-
-- Os 10 avatares da seleção agora são carregados por `avatars/01.webp` a `avatars/10.webp`.
-- A pasta de cenários e eventos continua sendo `public/arts`.
-- A pasta `public/avatars` inclui os arquivos WebP e não utiliza mais os PNG antigos.
-- `11.webp`, caso exista no seu GitHub, não é alterado e não está registrado na seleção atual de 10 personagens.
-- Para publicar, envie também a pasta `public/avatars` completa e substitua o `public/index.html`.
-- Se as imagens antigas persistirem, atualize a página com Ctrl+F5 e confira o deploy da Cloudflare.
+- `worker.js` — API de autenticação, moderação e controle de acesso às salas
+- `migrations/0001_auth.sql` — estrutura do banco D1
+- `wrangler.jsonc` — configurações e bindings Cloudflare
+- `public/index.html` — tela de login/cadastro, painel administrativo e jogo
+- `public/avatars` — retratos em WebP
+- `public/arts` — imagens 3D das cenas e batalhas
