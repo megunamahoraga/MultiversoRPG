@@ -8,7 +8,7 @@ const err = (message,status=400) => json({err:message},status);
 const sha = async (s) => Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',te.encode(s)))).map(x=>x.toString(16).padStart(2,'0')).join('');
 const hex = (b) => Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');
 const randomToken = () => hex(crypto.getRandomValues(new Uint8Array(32)));
-const makeHash = async (pass,salt) => hex(await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:te.encode(salt),iterations:130000},await crypto.subtle.importKey('raw',te.encode(pass),'PBKDF2',false,['deriveBits']),256));
+const makeHash = async (pass,salt) => hex(await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:te.encode(salt),iterations:100000},await crypto.subtle.importKey('raw',te.encode(pass),'PBKDF2',false,['deriveBits']),256));
 const safeSame = (a,b) => {const x=te.encode(a),y=te.encode(b); let diff=x.length^y.length; for(let i=0;i<Math.max(x.length,y.length);i++)diff |= (x[i]||0)^(y[i]||0);return diff===0;};
 const cookieValue = req => (req.headers.get('Cookie')||'').split(';').map(x=>x.trim()).find(x=>x.startsWith(COOKIE+'='))?.slice(COOKIE.length+1)||'';
 const cookie = (token,req,clear=false) => `${COOKIE}=${clear?'':token}; Path=/; HttpOnly; SameSite=Strict; ${new URL(req.url).protocol==='https:'?'Secure; ':''}${clear?'Max-Age=0':'Max-Age='+Math.floor(SESSION_MS/1000)}`;
