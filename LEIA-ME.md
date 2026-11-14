@@ -81,3 +81,5 @@ Acesse o domínio do seu jogo e clique em **Cadastrar** para criar uma conta de 
 
 
 **Nota de segurança:** a sessão de administrador expira em 8 horas. Se você mudar o segredo `ADMIN_PASSWORD`, as sessões administrativas anteriores perdem o acesso.
+
+Integração Cloudflare e GitHub configurada.
